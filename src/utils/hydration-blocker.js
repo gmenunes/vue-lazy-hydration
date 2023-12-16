@@ -9,7 +9,10 @@ export function makeHydrationBlocker(component, options) {
         this.cleanupHandlers = [];
         const { hydrate, hydrationPromise } = makeHydrationPromise();
         this.Nonce = makeNonce({ component, hydrationPromise });
-        this.hydrate = hydrate;
+        this.hydrate = () => {
+          hydrate();
+          this.$emit("hydrated");
+        };
         this.hydrationPromise = hydrationPromise;
       },
       beforeDestroy() {
